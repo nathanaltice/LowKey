@@ -83,7 +83,7 @@ class JustDown extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
         swap = this.input.keyboard.addKey('S');
         swap.on('down', () => {
-            this.scene.start("durationScene");
+            this.scene.start("keycomboScene");
         });
     }
 
@@ -98,9 +98,9 @@ class JustDown extends Phaser.Scene {
     }
 }
 
-class Duration extends Phaser.Scene {
+class KeyCombo extends Phaser.Scene {
     constructor() {
-        super("durationScene");
+        super("keycomboScene");
     }
 
     create() {
@@ -110,7 +110,7 @@ class Duration extends Phaser.Scene {
         // print messages
         this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
         this.add.text(centerX, h-100, 'Type \'facade\' to maek many skel').setOrigin(0.5);
-        this.add.text(centerX, h-50, 'Press \'S\' to change Scene').setOrigin(0.5);
+        //this.add.text(centerX, h-50, 'Press \'S\' to change Scene').setOrigin(0.5);
 
         // define key combo and S key
         let facadeCombo = this.input.keyboard.createCombo('facade', {
@@ -136,11 +136,7 @@ class Duration extends Phaser.Scene {
             }   
         });
 
-        swap = this.input.keyboard.addKey('S');
-    }
-
-    update() {
-
+        //swap = this.input.keyboard.addKey('S');
     }
 }
 
@@ -149,7 +145,7 @@ let config = {
     type: Phaser.AUTO,
     width: 500,
     height: 500,
-    scene: [ AnyKey, Cursors, JustDown, Duration ],
+    scene: [ AnyKey, Cursors, JustDown, KeyCombo ],
 }
 
 let game = new Phaser.Game(config);
