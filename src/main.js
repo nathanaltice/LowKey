@@ -1,3 +1,8 @@
+// Nathan Altice
+// Updated: 4/22/20
+// Key Party
+// Demonstrating some Phaser Keyboard events and objects
+
 class AnyKey extends Phaser.Scene {
     constructor() {
         super("anykeyScene");
