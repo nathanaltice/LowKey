@@ -5,7 +5,9 @@ class AnyKey extends Phaser.Scene {
 
     preload() {
         this.load.path = "assets/";
+        this.load.image('balloon', 'balloon.png');
         this.load.image('skull', 'skull.png');
+        this.load.image('cursed', 'cursed.jpg');
     }
 
     create() {
@@ -14,8 +16,7 @@ class AnyKey extends Phaser.Scene {
 
         // monitor any key down
         this.input.keyboard.on('keydown', () => {
-            // switch scenes
-            this.scene.start("cursorsScene");
+            this.scene.start("cursorsScene");   // switch scenes
         }, this);
     }
 }
@@ -27,14 +28,119 @@ class Cursors extends Phaser.Scene {
 
     create() {
         // new bg color
-        this.cameras.main.backgroundColor = 0x000022;
+        this.cameras.main.setBackgroundColor("#0000AA");
 
-        // print message
-        this.add.text(centerX, centerY, 'Cursors Scene').setOrigin(0.5);
+        // print messages
+        this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
+        this.add.text(centerX, h-100, 'Cursors (Press arrows, shift, or space)').setOrigin(0.5);
+        this.add.text(centerX, h-50, 'Press \'S\' to change Scene').setOrigin(0.5);
 
-        // define cursors
-        const cursors = this.input.keyboard.createCursorKeys();
-        console.log(cursors);
+        // define cursors and S key
+        cursors = this.input.keyboard.createCursorKeys(); console.log(cursors);
+        swap = this.input.keyboard.addKey('S');
+        swap.on('down', () => {
+            this.scene.start("justdownScene");
+        });
+    }
+
+    update() {
+        if (cursors.up.isDown) {
+            this.message.text = "UP";
+        } else if (cursors.down.isDown) {
+            this.message.text = "DOWN";
+        } else if (cursors.left.isDown) {
+            this.message.text = "LEFT";
+        } else if (cursors.right.isDown) {
+            this.message.text = "RIGHT";
+        } else if (cursors.shift.isDown) {
+            this.message.text = "SHIFT";
+        } else if (cursors.space.isDown) {
+            this.message.text = "SPACE";
+        } else {
+            this.message.text = "";
+        }
+    }
+}
+
+class JustDown extends Phaser.Scene {
+    constructor() {
+        super("justdownScene");
+    }
+
+    create() {
+        // new bg color
+        this.cameras.main.setBackgroundColor("#0ACADE");
+
+        // add balloon
+        this.balloon = this.add.sprite(centerX, centerY, 'balloon');
+
+        // print messages
+        this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
+        this.add.text(centerX, h-100, 'Tap UP ARROW to make balloon go up').setOrigin(0.5);
+        this.add.text(centerX, h-50, 'Press \'S\' to change Scene').setOrigin(0.5);
+
+        // define cursors and S key
+        cursors = this.input.keyboard.createCursorKeys();
+        swap = this.input.keyboard.addKey('S');
+        swap.on('down', () => {
+            this.scene.start("durationScene");
+        });
+    }
+
+    update() {
+        // note that cursors does not have a JustDown method
+        if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
+            this.balloon.y -= 1;
+            this.message.text = "GO!!!";
+        } else {
+            this.message.text = "";
+        }
+    }
+}
+
+class Duration extends Phaser.Scene {
+    constructor() {
+        super("durationScene");
+    }
+
+    create() {
+        // new bg color
+        this.cameras.main.setBackgroundColor("#110000");
+
+        // print messages
+        this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
+        this.add.text(centerX, h-100, 'Type \'facade\' to maek many skel').setOrigin(0.5);
+        this.add.text(centerX, h-50, 'Press \'S\' to change Scene').setOrigin(0.5);
+
+        // define key combo and S key
+        let facadeCombo = this.input.keyboard.createCombo('facade', {
+            resetOnWrongKey: true,  // if they press the wrong key is the combo reset?
+            maxKeyDelay: 0,       // max delay (ms) between each key press (0 = disabled)
+            resetOnMatch: true,    // if matched before, does pressing first key of combo reset?
+            deleteOnMatch: false     // if combo matches, will it delete itself?
+        });
+
+        let fastCombo = this.input.keyboard.createCombo('sanic', {
+            resetOnWrongKey: true,  // if they press the wrong key is the combo reset?
+            maxKeyDelay: 200,       // max delay (ms) between each key press (0 = disabled)
+            resetOnMatch: true,    // if matched before, does pressing first key of combo reset?
+            deleteOnMatch: true     // if combo matches, will it delete itself?
+        });
+
+        this.input.keyboard.on('keycombomatch', (combo, event) => {
+            if (combo === facadeCombo) { 
+                this.add.sprite(0,0, 'skull').setRandomPosition();
+            }
+            if (combo === fastCombo) {
+                this.add.sprite(centerX, centerY, 'cursed').setDepth(-1);
+            }   
+        });
+
+        swap = this.input.keyboard.addKey('S');
+    }
+
+    update() {
+
     }
 }
 
@@ -43,7 +149,7 @@ let config = {
     type: Phaser.AUTO,
     width: 500,
     height: 500,
-    scene: [ AnyKey, Cursors ],
+    scene: [ AnyKey, Cursors, JustDown, Duration ],
 }
 
 let game = new Phaser.Game(config);
@@ -53,3 +159,5 @@ let w = game.config.width;
 let h = game.config.height;
 let centerX = game.config.width / 2;
 let centerY = game.config.height / 2;
+let cursors = null;
+let swap = null;
