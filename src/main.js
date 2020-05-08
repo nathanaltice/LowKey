@@ -23,7 +23,7 @@ class AnyKey extends Phaser.Scene {
         // monitor *any* key down...
         this.input.keyboard.on('keydown', () => {
             this.scene.start("cursorsScene");   // ...and switch scenes
-        }, this);
+        }, this);   // <-- note this allows you to pass context
     }
 }
 
@@ -42,11 +42,8 @@ class Cursors extends Phaser.Scene {
         this.add.text(centerX, h-50, 'Press \'S\' to change Scene').setOrigin(0.5);
 
         // define cursors and S key (for Scene switching)
-        cursors = this.input.keyboard.createCursorKeys(); console.log(cursors);
-        swap = this.input.keyboard.addKey('S');
-        swap.on('down', () => {
-            this.scene.start("justdownScene");
-        });
+        cursors = this.input.keyboard.createCursorKeys();
+        this.swap = this.input.keyboard.addKey('S');
     }
 
     update() {
@@ -65,6 +62,11 @@ class Cursors extends Phaser.Scene {
             this.message.text = "SPACE";
         } else {
             this.message.text = "";
+        }
+
+        // scene switching
+        if(Phaser.Input.Keyboard.JustDown(this.swap)) {
+            this.scene.start("justdownScene");
         }
     }
 }
@@ -88,10 +90,7 @@ class JustDown extends Phaser.Scene {
 
         // define cursors and S key
         cursors = this.input.keyboard.createCursorKeys();
-        swap = this.input.keyboard.addKey('S');
-        swap.on('down', () => {
-            this.scene.start("keycomboScene");
-        });
+        this.swap = this.input.keyboard.addKey('S');
     }
 
     update() {
@@ -101,6 +100,10 @@ class JustDown extends Phaser.Scene {
             this.message.text = "GO!!!";
         } else {
             this.message.text = "";
+        }
+        // scene switching
+        if(Phaser.Input.Keyboard.JustDown(this.swap)) {
+            this.scene.start("keycomboScene");
         }
     }
 }
@@ -143,8 +146,6 @@ class KeyCombo extends Phaser.Scene {
                 this.add.sprite(centerX, centerY, 'cursed').setScale(0.5).setDepth(-1);
             }   
         });
-
-        //swap = this.input.keyboard.addKey('S');
     }
 }
 
@@ -164,4 +165,3 @@ let h = game.config.height;
 let centerX = game.config.width / 2;
 let centerY = game.config.height / 2;
 let cursors = null;
-let swap = null;
