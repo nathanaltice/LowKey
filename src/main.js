@@ -5,12 +5,12 @@
 
 class AnyKey extends Phaser.Scene {
     constructor() {
-        super("anykeyScene");
+        super('anykeyScene');
     }
 
     preload() {
         // load our assets
-        this.load.path = "assets/";
+        this.load.path = 'assets/';
         this.load.image('balloon', 'balloon.png');
         this.load.image('skull', 'skull.png');
         this.load.image('cursed', 'cursed.jpg');
@@ -22,19 +22,19 @@ class AnyKey extends Phaser.Scene {
 
         // monitor *any* key down...
         this.input.keyboard.on('keydown', () => {
-            this.scene.start("cursorsScene");   // ...and switch scenes
-        }, this);   // <-- note this allows you to pass context
+            this.scene.start('cursorsScene');   // ...and switch scenes
+        }, this);   // <-- note `this` allows you to pass current context to the event
     }
 }
 
 class Cursors extends Phaser.Scene {
     constructor() {
-        super("cursorsScene");
+        super('cursorsScene');
     }
 
     create() {
         // new bg color
-        this.cameras.main.setBackgroundColor("#0000AA");
+        this.cameras.main.setBackgroundColor('#0000AA');
 
         // print messages
         this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
@@ -49,36 +49,36 @@ class Cursors extends Phaser.Scene {
     update() {
         // check for all cursors object keys
         if (cursors.up.isDown) {
-            this.message.text = "UP";
+            this.message.text = 'UP';
         } else if (cursors.down.isDown) {
-            this.message.text = "DOWN";
+            this.message.text = 'DOWN';
         } else if (cursors.left.isDown) {
-            this.message.text = "LEFT";
+            this.message.text = 'LEFT';
         } else if (cursors.right.isDown) {
-            this.message.text = "RIGHT";
+            this.message.text = 'RIGHT';
         } else if (cursors.shift.isDown) {
-            this.message.text = "SHIFT";
+            this.message.text = 'SHIFT';
         } else if (cursors.space.isDown) {
-            this.message.text = "SPACE";
+            this.message.text = 'SPACE';
         } else {
-            this.message.text = "";
+            this.message.text = '';
         }
 
         // scene switching
         if(Phaser.Input.Keyboard.JustDown(this.swap)) {
-            this.scene.start("justdownScene");
+            this.scene.start('justdownScene');
         }
     }
 }
 
 class JustDown extends Phaser.Scene {
     constructor() {
-        super("justdownScene");
+        super('justdownScene');
     }
 
     create() {
         // new bg color
-        this.cameras.main.setBackgroundColor("#0ACADE");
+        this.cameras.main.setBackgroundColor('#0ACADE');
 
         // add balloon
         this.balloon = this.add.sprite(centerX, centerY, 'balloon');
@@ -97,25 +97,25 @@ class JustDown extends Phaser.Scene {
         // note that `cursors` does not have a JustDown method :/
         if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
             this.balloon.y -= 1;
-            this.message.text = "GO!!!";
+            this.message.text = 'GO!!!';
         } else {
-            this.message.text = "";
+            this.message.text = '';
         }
         // scene switching
         if(Phaser.Input.Keyboard.JustDown(this.swap)) {
-            this.scene.start("keycomboScene");
+            this.scene.start('keycomboScene');
         }
     }
 }
 
 class KeyCombo extends Phaser.Scene {
     constructor() {
-        super("keycomboScene");
+        super('keycomboScene');
     }
 
     create() {
         // new bg color
-        this.cameras.main.setBackgroundColor("#110000");
+        this.cameras.main.setBackgroundColor('#110000');
 
         // print messages
         this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
