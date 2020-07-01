@@ -1,6 +1,6 @@
 // Nathan Altice
 // Updated: 4/22/20
-// Key Party
+// Low Key
 // Demonstrating some Phaser Keyboard events and objects
 
 class AnyKey extends Phaser.Scene {
@@ -94,7 +94,7 @@ class JustDown extends Phaser.Scene {
     }
 
     update() {
-        // note that cursors does not have a JustDown method
+        // note that `cursors` does not have a JustDown method :/
         if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
             this.balloon.y -= 1;
             this.message.text = "GO!!!";
