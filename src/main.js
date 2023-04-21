@@ -1,5 +1,5 @@
 // Nathan Altice
-// Updated: 4/9/21
+// Updated: 4/20/23
 // Low Key
 // Demonstrating a few Phaser Keyboard events and objects
 
@@ -39,11 +39,11 @@ class Cursors extends Phaser.Scene {
         // print messages
         this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
         this.add.text(centerX, height-100, 'Cursors (Press arrows, shift, or space)').setOrigin(0.5);
-        this.add.text(centerX, height-50, 'Press \'S\' to change Scene').setOrigin(0.5);
+        this.add.text(centerX, height-50, 'Press \'C\' to Change scene').setOrigin(0.5);
 
         // define cursors and S key (for Scene switching)
         cursors = this.input.keyboard.createCursorKeys();
-        this.swap = this.input.keyboard.addKey('S');
+        this.swap = this.input.keyboard.addKey('C');
     }
 
     update() {
@@ -86,15 +86,15 @@ class JustDown extends Phaser.Scene {
         // print messages
         this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
         this.add.text(centerX, height-100, 'Tap UP ARROW to make balloon go up').setOrigin(0.5);
-        this.add.text(centerX, height-50, 'Press \'S\' to change Scene').setOrigin(0.5);
+        this.add.text(centerX, height-50, 'Press \'C\' to change Scene').setOrigin(0.5);
 
         // define cursors and S key
         cursors = this.input.keyboard.createCursorKeys();
-        this.swap = this.input.keyboard.addKey('S');
+        this.swap = this.input.keyboard.addKey('C');
     }
 
     update() {
-        // note that `cursors` does not have a JustDown method :/
+        // note that `cursors` does not have a JustDown method :<<<<<
         if (Phaser.Input.Keyboard.JustDown(cursors.up)) {
             this.balloon.y -= 1;
             this.message.text = 'GO!!!';
@@ -119,19 +119,19 @@ class KeyCombo extends Phaser.Scene {
 
         // print messages
         this.message = this.add.text(centerX, centerY, '').setOrigin(0.5);
-        this.add.text(centerX, height-100, 'Type \'facade\' to maek many skel').setOrigin(0.5);
-        //this.add.text(centerX, height-50, 'Press \'S\' to change Scene').setOrigin(0.5);
+        this.add.text(centerX, height-100, 'Type \'skull\' to summon skellies').setOrigin(0.5);
+        this.add.text(centerX, height-50, 'Press \'C\' to change Scene').setOrigin(0.5);
 
         // define two key combos
         // you can type this one as slow as you want
-        let facadeCombo = this.input.keyboard.createCombo('facade', {
+        let facadeCombo = this.input.keyboard.createCombo('skull', {
             resetOnWrongKey: true,  // if they press the wrong key is the combo reset?
             maxKeyDelay: 0,         // max delay (ms) between each key press (0 = disabled)
             resetOnMatch: true,     // if matched before, does pressing first key of combo reset?
             deleteOnMatch: false    // if combo matches, will it delete itself?
         });
         // for this one, you gotta type fast
-        let fastCombo = this.input.keyboard.createCombo('sanic', {
+        let fastCombo = this.input.keyboard.createCombo('fast', {
             resetOnWrongKey: true,  // if they press the wrong key is the combo reset?
             maxKeyDelay: 200,       // max delay (ms) between each key press (0 = disabled)
             resetOnMatch: true,     // if matched before, does pressing first key of combo reset?
@@ -146,6 +146,15 @@ class KeyCombo extends Phaser.Scene {
                 this.add.sprite(centerX, centerY, 'cursed').setScale(0.5).setDepth(-1);
             }   
         });
+
+        this.swap = this.input.keyboard.addKey('C');
+    }
+
+    update() {
+        // scene switching
+        if(Phaser.Input.Keyboard.JustDown(this.swap)) {
+            this.scene.start('anykeyScene');
+        }
     }
 }
 
